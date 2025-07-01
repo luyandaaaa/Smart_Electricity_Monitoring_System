@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports & Downloads</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4F46E5;    /* Indigo */
+            --secondary: #6366F1;  /* Light Indigo */
+            --accent: #818CF8;     /* Lighter Indigo */
+            --light: #F8FAFC;      /* Lightest Gray */
+            --dark: #1E293B;       /* Dark Blue Gray */
+            --success: #34D399;    /* Emerald */
+            --warning: #F59E0B;    /* Amber */
+            --danger: #EF4444;     /* Red */
+            --sidebar-bg: #E0E7FF; /* Light Indigo */
+            --card-bg:rgb(255, 255, 255);    /* White */
+            --text: #1E293B;
+            --text-light:rgb(132, 148, 170);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--light);
+            color: var(--text);
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg) !important;
+            color: var(--dark) !important;
+            padding: 20px 0;
+            height: 100vh;
+            position: fixed;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.05);
+        }
+        
+        .logo-container {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .admin-title {
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .nav-menu {
+            list-style: none;
+        }
+        
+        .nav-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 5px 10px;
+            border-radius: 6px;
+        }
+        
+        .nav-item:hover {
+            background-color: rgba(79, 70, 229, 0.1) !important;
+            transform: translateX(5px);
+        }
+        
+        .nav-link {
+            text-decoration: none !important;
+            color: var(--dark) !important;
+            display: block;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 30px;
+            background-color: var(--light);
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .dashboard-subtitle {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+        
+        .filter-container {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            background-color: rgb(200, 118, 241);
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        
+        .filter-label {
+            margin-right: 10px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .filter-select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            background-color: var(--card-bg);
+            color: var(--text);
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .filter-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+        
+        .last-updated {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            text-align: right;
+        }
+        
+        .card {
+            background: rgb(215, 240, 241);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.1);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(128, 130, 216, 0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+        }
+        
+        .filters-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .report-card {
+            padding: 20px;
+            border-radius: 10px;
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        
+        .report-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.1);
+        }
+        
+        .report-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .report-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .report-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+        }
+        
+        .download-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .download-option {
+            padding: 6px 12px;
+            border-radius: 4px;
+            background-color: var(--light);
+            color: var(--primary);
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        
+        .download-option:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* AI Report Styles */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .ai-insights {
+            margin-bottom: 20px;
+        }
+        
+        .ai-loading {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .ai-loading-dots {
+            display: inline-flex;
+            margin-left: 5px;
+        }
+        
+        .ai-loading-dots span {
+            display: block;
+            width: 6px;
+            height: 6px;
+            margin: 0 2px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: ai-dot-blink 1.4s infinite both;
+        }
+        
+        @keyframes ai-dot-blink {
+            0%, 20% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <div class="logo">EM</div>
+            <span class="admin-title">Monitor</span>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+            <li class="nav-item"><a href="/alerts" class="nav-link">Alerts</a></li>
+            <li class="nav-item"><a href="/technicians" class="nav-link">Technician Dispatch</a></li>
+            <li class="nav-item {% if active_page == 'reports' %}active{% endif %}"><a href="/reports" class="nav-link">Reports</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="dashboard-header">
+            <div>
+                <h1 class="dashboard-title">Reports & Analytics</h1>
+                <p class="dashboard-subtitle">Generate detailed system reports</p>
+            </div>
+            <div class="last-updated">Last updated: {{ last_updated }}</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-file-export" style="margin-right: 10px; color: var(--accent);"></i> Report Generator</h2>
+            </div>
+            <div class="card-body">
+                <div class="filters-row">
+                    <div class="filter-container">
+                        <span class="filter-label"><i class="fas fa-file-alt" style="margin-right: 8px;"></i> Report Type:</span>
+                        <select id="reportType" class="filter-select">
+                            <option value="outage">Outage History</option>
+                            <option value="usage">Usage Patterns</option>
+                            <option value="revenue">Revenue Report</option>
+                            <option value="meter">Meter Analysis</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-container">
+                        <span class="filter-label"><i class="fas fa-file-download" style="margin-right: 8px;"></i> Format:</span>
+                        <select id="reportFormat" class="filter-select">
+                            <option value="csv">CSV</option>
+                            <option value="pdf">PDF</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-container">
+                        <span class="filter-label"><i class="fas fa-calendar-alt" style="margin-right: 8px;"></i> Date Range:</span>
+                        <input type="date" id="startDate" class="filter-select">
+                        <input type="date" id="endDate" class="filter-select" style="margin-left: 10px;">
+                    </div>
+                    
+                    <button class="btn" onclick="generateReport()">
+                        <i class="fas fa-download"></i> Generate Report
+                    </button>
+                </div>
+                
+                <div class="filters-row" style="margin-top: 20px;">
+                    <div class="filter-container">
+                        <span class="filter-label"><i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i> Filter by Area:</span>
+                        <select id="reportArea" class="filter-select">
+                            <option value="all">All Areas</option>
+                            {% for place in places %}
+                            <option value="{{ place }}">{{ place }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="filter-container">
+                        <span class="filter-label"><i class="fas fa-tachometer-alt" style="margin-right: 8px;"></i> Meter Type:</span>
+                        <select id="meterType" class="filter-select">
+                            <option value="all">All Types</option>
+                            {% for type in meter_types %}
+                            <option value="{{ type }}">{{ type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI-Powered Reports -->
+        <div class="card glass-card" style="margin-top: 20px;">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-robot" style="margin-right: 10px; color: var(--accent);"></i> 
+              AI Report Insights
+            </h2>
+            <button class="btn-gradient" onclick="generateAIReport()">
+              <i class="fas fa-magic"></i> Generate AI Summary
+            </button>
+          </div>
+          
+          <div class="card-body">
+            <div class="ai-insights">
+              <h4><i class="fas fa-lightbulb"></i> Executive Summary</h4>
+              <div id="aiReportSummary">
+                <p>No AI summary generated yet. Click "Generate AI Summary" to create an automated report analysis.</p>
+              </div>
+            </div>
+            
+            <div class="ai-insights">
+              <h4><i class="fas fa-chart-line"></i> Key Trends</h4>
+              <div id="aiReportTrends">
+                <p>AI analysis will highlight significant trends and patterns in your data.</p>
+              </div>
+            </div>
+            
+            <div class="ai-insights">
+              <h4><i class="fas fa-exclamation-triangle"></i> Actionable Insights</h4>
+              <div id="aiReportActions">
+                <p>AI will provide recommended actions based on the report findings.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Smart Reports Panel -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-lightbulb"></i> AI Report Insights</h2>
+            <button class="action-btn assign" onclick="generateAIInsights()">
+              <i class="fas fa-brain"></i> Generate Insights
+            </button>
+          </div>
+          
+          <div style="padding: 20px;">
+            <div class="fault-item" style="margin-bottom: 15px;">
+              <div>
+                <div class="fault-location">Key Trend</div>
+                <div class="fault-details" id="aiTrendText">Click "Generate Insights" to identify patterns in this report</div>
+              </div>
+              <span class="fault-priority priority-standard">Insight</span>
+            </div>
+            
+            <div class="fault-item" style="margin-bottom: 15px;">
+              <div>
+                <div class="fault-location">Anomaly Detected</div>
+                <div class="fault-details" id="aiAnomalyText">AI will highlight unusual data points</div>
+              </div>
+              <span class="fault-priority priority-critical">Important</span>
+            </div>
+            
+            <div class="fault-item">
+              <div>
+                <div class="fault-location">Recommendation</div>
+                <div class="fault-details" id="aiRecommendationText">Actionable suggestions will appear here</div>
+              </div>
+              <span class="fault-priority status-onsite">Suggested</span>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+    <script>
+        function generateReport() {
+            const reportType = document.getElementById('reportType').value;
+            const format = document.getElementById('reportFormat').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const area = document.getElementById('reportArea').value;
+            const meterType = document.getElementById('meterType').value;
+            
+            const params = new URLSearchParams({
+                type: reportType,
+                format: format,
+                start: startDate,
+                end: endDate,
+                area: area,
+                meter_type: meterType
+            });
+            
+            window.location.href = `/generate_report?${params.toString()}`;
+        }
+
+        /* AI Report Script */
+        function generateAIReport() {
+            const summaryElement = document.getElementById('aiReportSummary');
+            const trendsElement = document.getElementById('aiReportTrends');
+            const actionsElement = document.getElementById('aiReportActions');
+            
+            // Show loading state
+            summaryElement.innerHTML = '<p class="ai-loading"><span>Analyzing report data</span><div class="ai-loading-dots"><span></span><span></span><span></span></div></p>';
+            trendsElement.innerHTML = '<p class="ai-loading"><span>Identifying trends</span><div class="ai-loading-dots"><span></span><span></span><span></span></div></p>';
+            actionsElement.innerHTML = '<p class="ai-loading"><span>Generating recommendations</span><div class="ai-loading-dots"><span></span><span></span><span></span></div></p>';
+            
+            // Get current report filters
+            const reportType = document.getElementById('reportType').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const area = document.getElementById('reportArea').value;
+            const meterType = document.getElementById('meterType').value;
+            
+            // Simulate API call to AI service
+            setTimeout(() => {
+              // Generate sample insights based on report type
+              let summary, trends, actions;
+              
+              switch(reportType) {
+                case 'outage':
+                  summary = "The outage report shows a 23% increase in outages compared to last quarter, primarily concentrated in the Chatsworth area.";
+                  trends = "Most outages occur between 2-5pm, suggesting a correlation with peak usage times. Industrial areas account for 62% of critical outages.";
+                  actions = "1. Upgrade transformers in Chatsworth industrial zone. 2. Implement load balancing for peak hours. 3. Schedule preventive maintenance for 5 high-risk transformers.";
+                  break;
+                case 'usage':
+                  summary = "Usage patterns show residential consumption increased by 15% while industrial usage decreased by 8% compared to last year.";
+                  trends = "Notable anomalies detected in 12 meters showing irregular usage patterns. Newlands area shows highest per-capita consumption.";
+                  actions = "1. Investigate meters with irregular patterns for possible tampering. 2. Launch energy efficiency campaign in Newlands. 3. Adjust pricing model for industrial users.";
+                  break;
+                case 'revenue':
+                  summary = "Total revenue increased by 8.2% year-over-year, with residential segment contributing 68% of total revenue.";
+                  trends = "Revenue growth is strongest in Westville (14%) while Kwamashu shows decline (-3%). Prepaid meters generate 42% more revenue than postpaid.";
+                  actions = "1. Expand prepaid meter rollout in Westville. 2. Investigate revenue decline in Kwamashu. 3. Consider tiered pricing for high-usage residential customers.";
+                  break;
+                case 'meter':
+                  summary = "Meter analysis reveals 92% uptime across all meter types, with smart meters showing 98% reliability.";
+                  trends = "Older electromechanical meters account for 73% of failures. Smart meters show 40% fewer issues than traditional meters.";
+                  actions = "1. Accelerate smart meter replacement program. 2. Prioritize replacement of meters installed before 2015. 3. Implement remote diagnostic checks monthly.";
+                  break;
+                default:
+                  summary = "AI analysis complete. Key insights generated for this report.";
+                  trends = "The data shows several interesting patterns worth further investigation.";
+                  actions = "Review the detailed findings below and consider the recommended actions.";
+              }
+              
+              // Update UI with generated insights
+              summaryElement.innerHTML = `<p>${summary}</p>`;
+              trendsElement.innerHTML = `<p>${trends}</p>`;
+              actionsElement.innerHTML = `<ol>${actions.split('. ').slice(0, -1).map(item => `<li>${item.replace(/^\d+\.\s/, '')}</li>`).join('')}</ol>`;
+            }, 3000);
+          }
+
+          function generateAIInsights() {
+            const trendText = document.getElementById('aiTrendText');
+            const anomalyText = document.getElementById('aiAnomalyText');
+            const recommendationText = document.getElementById('aiRecommendationText');
+            
+            // Show loading state
+            trendText.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing trends...';
+            anomalyText.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scanning for anomalies...';
+            recommendationText.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating recommendations...';
+            
+            // Simulate AI processing
+            setTimeout(() => {
+              const reportType = document.getElementById('reportType').value;
+              
+              // Sample insights based on report type
+              if (reportType === 'outage') {
+                trendText.textContent = 'Outages increased by 22% on weekends, especially in industrial areas.';
+                anomalyText.textContent = 'Chatsworth shows 3x more outages than similar areas.';
+                recommendationText.textContent = 'Prioritize grid upgrades in Chatsworth and schedule weekend maintenance crews.';
+              } 
+              else if (reportType === 'usage') {
+                trendText.textContent = 'Residential usage peaks between 6-9pm, while industrial peaks at 1-3pm.';
+                anomalyText.textContent = '15 meters show zero usage during peak hours (possible faults).';
+                recommendationText.textContent = 'Inspect identified meters and consider time-based pricing for residential users.';
+              }
+              else {
+                trendText.textContent = 'The data shows several significant patterns worth further investigation.';
+                anomalyText.textContent = 'No critical anomalies detected in this dataset.';
+                recommendationText.textContent = 'Review the detailed findings in the full report.';
+              }
+            }, 2000);
+          }
+    </script>
+</body>
+</html>
